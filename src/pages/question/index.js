@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory, useRouteMatch, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -41,13 +41,11 @@ const useStyles = makeStyles((theme) => ({
 const Question = () => {
   const classes = useStyles();
   const history = useHistory();
-  const match = useRouteMatch();
-  const params = useParams();
 
-  const question = questions.find((q) => q.id === params.id);
+  const question = questions[0];
 
   const handleClick = () => {
-    history.push(`${match.url}/test`);
+    history.push(`/questions/${question.id}/test`);
   };
   return (
     <div className={classes.container}>

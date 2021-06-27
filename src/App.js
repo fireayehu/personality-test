@@ -1,7 +1,6 @@
 import { Switch, Route } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 
-import HomePage from "./pages/home";
 import RecentPage from "./pages/recent";
 import QuestionPage from "./pages/question";
 import TestPage from "./pages/test";
@@ -16,7 +15,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     paddingLeft: 0,
     paddingRight: 0,
-    paddingBottom: 3,
+  },
+  mainContainer: {
+    flex: 1,
+    marginBottom: 100,
   },
 }));
 
@@ -24,15 +26,15 @@ const App = () => {
   const classes = useStyles();
   return (
     <Container maxWidth="xs" className={classes.container}>
-      <div style={{ flexGrow: 1 }}>
+      <div className={classes.mainContainer}>
         <Switch>
           <Route exact path="/">
-            <HomePage />
+            <QuestionPage />
           </Route>
           <Route exact path="/recent">
             <RecentPage />
           </Route>
-          <Route exact path="/questions/:id">
+          <Route exact path="/questions">
             <QuestionPage />
           </Route>
           <Route exact path="/questions/:id/test">

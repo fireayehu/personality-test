@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -81,6 +82,7 @@ const getInitialValue = (questions) => {
 };
 
 const Test = () => {
+  const history = useHistory();
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [value, setValue] = React.useState(getInitialValue(question.questions));
@@ -95,8 +97,7 @@ const Test = () => {
   };
 
   const handleReset = () => {
-    setValue(getInitialValue(question.questions));
-    setActiveStep(0);
+    history.push("/");
   };
   const handleChange = (event) => {
     const id = steps[activeStep].id;
