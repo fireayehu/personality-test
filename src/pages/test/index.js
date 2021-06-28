@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
@@ -84,8 +84,8 @@ const getInitialValue = (questions) => {
 const Test = () => {
   const history = useHistory();
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [value, setValue] = React.useState(getInitialValue(question.questions));
+  const [activeStep, setActiveStep] = useState(0);
+  const [value, setValue] = useState(getInitialValue(question.questions));
   const steps = question.questions;
 
   const handleNext = () => {
@@ -183,6 +183,7 @@ const Test = () => {
                 className={classes.button}
                 onClick={handleNext}
                 size="small"
+                disabled={!value[steps[activeStep].id]}
               >
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>
