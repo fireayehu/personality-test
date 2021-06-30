@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { ReactComponent as LightBulb } from "../../assets/lightbulb.svg";
-import { questions } from "./data";
+import Loader from "../../components/loader";
+import RefreshButton from "../../components/refresh";
+import AlertError from "../../components/error";
+import { fetchSingleQuestionStart } from "../../store/question/reducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,20 +36,53 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
+    borderRadius: 10,
   },
 }));
 
 const Question = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
 
-  const question = questions[0];
+  const {
+    singleQuestion: question,
+    fetchSingleQuestionLoading: loading,
+    fetchSingleQuestionError: error,
+  } = useSelector((state) => state.question);
+
+  useEffect(() => {
+    dispatch(fetchSingleQuestionStart());
+  }, []);
 
   const handleClick = () => {
-    history.push(`/questions/${question.id}/test`);
+    history.push(`/questions/${question._id}/test`);
   };
+  const handleRefresh = () => {
+    dispatch(fetchSingleQuestionStart());
+  };
+  if (error) {
+    return (
+      <AlertError
+        message={error.response ? error.response.data.message : error.message}
+        onClick={handleRefresh}
+      />
+    );
+  }
+  if (loading) {
+    return <Loader message="Loading question..." />;
+  }
+  if (!question) {
+    return (
+      <RefreshButton
+        message="There are no questions yet"
+        onClick={handleRefresh}
+      />
+    );
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -61,7 +97,11 @@ const Question = () => {
           {question.description}
         </Typography>
       </div>
-      <LightBulb className={classes.image} />
+      <img
+        src={`${process.env.REACT_APP_IMG_URL}/cover/${question.coverImg}`}
+        alt={question.title}
+        className={classes.image}
+      />
       <Button
         variant="outlined"
         className={classes.button}
